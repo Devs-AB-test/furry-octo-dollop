@@ -9,11 +9,15 @@ const { context = {} } = github;
 const { pull_request } = context.payload;
 
 async function run(){
-    await octokit.issues.createComment({
-     ...context.repo,
-     issue_number: pull_request.number,
-     body: 'Well Done!! Thanks for contributing'
-    });
+    try{
+      await octokit.issues.createComment({
+       ...context.repo,
+       issue_number: pull_request.number,
+       body: 'Well Done!! Thanks for contributing'
+      });
+    }catch(error) {
+    core.setFailed(`Error adding autoresponse: ${error.message}`);
+    }
 }
 
 run();
